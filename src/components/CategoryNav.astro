@@ -1,0 +1,29 @@
+---
+const categories = [
+  'Breaking News',
+  'Politics',
+  'World',
+  'Technology',
+  'Business',
+  'Science',
+  'Health',
+  'Sports',
+  'Entertainment',
+  'Lifestyle'
+];
+---
+
+<nav class="bg-gray-100 py-4 sticky top-0 z-10">
+  <div class="container mx-auto px-4">
+    <ul class="flex space-x-6 overflow-x-auto">
+      {categories.map(category => (
+        <li>
+          <a href={`/category/${category.toLowerCase().replace(' ', '-')}`} 
+             class="text-gray-700 hover:text-blue-600 whitespace-nowrap transition-colors">
+            {category}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

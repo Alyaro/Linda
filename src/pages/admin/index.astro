@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticles } from '../../lib/articles';
+
+if (!Astro.cookies.get('admin')) {
+  return Astro.redirect('/admin/login');
+}
+
+const articles = await getArticles();
+---
+
+<Layout title="Admin Dashboard">
+  <div class="max-w-6xl mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Content Management</h1>
+      <a href="/admin/new" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Add New Article
+      </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow">
+      <table class="min-w-full">
+        <thead>
+          <tr class="border-b">
+            <th class="px-6 py-3 text-left">Title</th>
+            <th class="px-6 py-3 text-left">Category</th>
+            <th class="px-6 py-3 text-left">Date</th>
+            <th class="px-6 py-3 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {articles.map(article => (
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-6 py-4">{article.title}</td>
+              <td class="px-6 py-4">{article.category}</td>
+              <td class="px-6 py-4">{new Date(article.publishDate).toLocaleDateString()}</td>
+              <td class="px-6 py-4">
+                <a href={`/admin/edit/${article.id}`} class="text-blue-600 hover:text-blue-800 mr-4">Edit</a>
+                <button 
+                  data-id={article.id}
+                  class="text-red-600 hover:text-red-800 delete-article">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Layout>
+
+<script>
+document.querySelectorAll('.delete-article').forEach(button => {
+  button.addEventListener('click', async (e) => {
+    if (!confirm('Are you sure you want to delete this article?')) return;
+    
+    const id = e.target.dataset.id;
+    await fetch(`/api/articles/${id}`, { method: 'DELETE' });
+    window.location.reload();
+  });
+});
+</script>

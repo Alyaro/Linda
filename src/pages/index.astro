@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { featuredArticles, latestArticles } from '../data/articles';
+---
+
+<Layout title="Latest News">
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Featured Stories</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredArticles.map(article => (
+        <ArticleCard {...article} />
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-bold mb-6">Latest News</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {latestArticles.map(article => (
+        <ArticleCard {...article} />
+      ))}
+    </div>
+  </section>
+</Layout>
